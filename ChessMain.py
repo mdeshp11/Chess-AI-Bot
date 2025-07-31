@@ -3,7 +3,7 @@ Main driver file.
 Handling user input.
 Displaying current GameStatus object.
 """
-import os
+import os, sys
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 import pygame as p
@@ -12,16 +12,15 @@ import ChessAI as ChessAI
 from button import Button
 import sys
 from multiprocessing import Process, Queue, freeze_support
-# from button import Button
 
+def resource_path(relative):
+    base = getattr(sys, "_MEIPASS", os.path.dirname(__file__))
+    return os.path.join(base, relative)
 
-BG = p.image.load("assets/Background.png")
+BG = p.image.load(resource_path("assets/Background.png"))
 
-def get_font(size):  # Returns Press-Start-2P in the desired size
-    return p.font.Font("assets/font.ttf", size)
-
-# Kalyn Mbaba
-# Lakaka
+def get_font(size):
+    return p.font.Font(resource_path("assets/font.ttf"), size)
 
 BOARD_WIDTH = BOARD_HEIGHT = 512
 MOVE_LOG_PANEL_WIDTH = 250
@@ -40,7 +39,7 @@ def loadImages(pl_white):
     pieces = ['wp', 'wR', 'wN', 'wB', 'wK', 'wQ', 'bp', 'bR', 'bN', 'bB', 'bK', 'bQ']
     for piece in pieces:
         if pl_white:
-            IMAGES[piece] = p.transform.scale(p.image.load("assets/" + piece + ".png"), (SQUARE_SIZE, SQUARE_SIZE))
+            IMAGES[piece] = p.transform.scale(p.image.load(resource_path(f"assets/{piece}.png")), (SQUARE_SIZE, SQUARE_SIZE))
         else:
             IMAGES[piece] = p.transform.scale(p.image.load("photos/" + piece + ".png"), (SQUARE_SIZE, SQUARE_SIZE))
 
@@ -71,7 +70,7 @@ def main():
     player_white = True
     game_state = ChessEngine.GameState()
     valid_moves = game_state.getValidMoves()
-    loadImages(player_white)  # do this only once before while loop
+    loadImages(player_white)
 
 
     while run:
@@ -82,11 +81,11 @@ def main():
         MENU_TEXT = get_font(30).render("CHESS GAME", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(381, 50))
 
-        PLAY_BUTTON = Button(image=p.image.load("assets/Rect.png"), pos=(381, 150),
+        PLAY_BUTTON = Button(image=p.image.load(resource_path("assets/Rect.png")), pos=(381, 150),
                              text_input="EASY", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=p.image.load("assets/Rect.png"), pos=(381, 300),
+        OPTIONS_BUTTON = Button(image=p.image.load(resource_path("assets/Rect.png")), pos=(381, 300),
                                 text_input="HARD", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=p.image.load("assets/Rect.png"), pos=(381, 450),
+        QUIT_BUTTON = Button(image=p.image.load(resource_path("assets/Rect.png")), pos=(381, 450),
                              text_input="QUIT", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(MENU_TEXT, MENU_RECT)
@@ -135,14 +134,14 @@ def main():
                     else:
                         square_selected = (row, col)
                         player_clicks.append(square_selected)  # append for both 1st and 2nd click
-                    if len(player_clicks) == 2 and human_turn:  # after 2nd click
+                    if len(player_clicks) == 2 and human_turn:
                         move = ChessEngine.Move(player_clicks[0], player_clicks[1], game_state.board)
                         for i in range(len(valid_moves)):
                             if move == valid_moves[i]:
                                 game_state.makeMove(valid_moves[i])
                                 move_made = True
                                 animate = True
-                                square_selected = ()  # reset user clicks
+                                square_selected = ()
                                 player_clicks = []
                         if not move_made:
                             player_clicks = [square_selected]
