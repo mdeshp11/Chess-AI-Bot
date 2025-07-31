@@ -38,3 +38,9 @@ A simple Chess game with AI opponent built in Python. The AI uses the Negamax op
 ## Configuration
 - **AI depth**: In ChessEngine.py, adjust the SEARCH_DEPTH constant to increase or decrease AI difficulty.
 - **Window size**: Modify WINDOW_WIDTH and WINDOW_HEIGHT in ChessMain.py.
+
+## Download
+
+Grab the standalone Windows executable from the v1.0 release:
+
+[Download Chess-AI-Bot.exe](https://github.com/mdeshp11/Chess-AI-Bot/releases/download/v1.0/Chess-AI-Bot.exe)
